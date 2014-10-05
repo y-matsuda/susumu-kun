@@ -1,0 +1,21 @@
+{
+  "name": "進捗変更ススム君",
+  "version": "1.0",
+  "manifest_version": 2,
+
+  "description": "githubのラベルを更新します",
+
+  "permissions": [
+    "http://*/*"
+  ],
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "page_action": {
+    "default_icon": "icon.png",
+    "default_title": "ススム君",
+    "default_popup": "popup.html"
+  }
+}

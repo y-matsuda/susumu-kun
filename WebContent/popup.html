@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="Shift_JIS"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=Shift_JIS" />
+<title>進捗変更ススム君</title>
+<script type="text/javascript"
+	src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+<script type="text/javascript" src="popup.js"></script>
+
+<!-- bootstrap -->
+<link href="dist/css/bootstrap.min.css" rel="stylesheet" />
+<!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+      <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+
+
+<body>
+
+	<div id="header">
+		<h1>進捗変更ススム君</h1>
+	</div>
+
+	<div id="row">
+		<div id="container">
+			<form role="form">
+				<div class="form-group">
+					<label for="github_access_token">github access token</label> <input
+						type="text" class="form-control" id="github_access_token" />
+				</div>
+				<div class="form-group">
+					<label for="owner">owner</label> <input type="text"
+						class="form-control" id="owner" />
+				</div>
+				<div class="form-group">
+					<label for="repo">repo</label> <input type="text"
+						class="form-control" id="repo" />
+				</div>
+				<div class="form-group">
+					<label for="issues_number">issues number</label> <input type="text"
+						class="form-control" id="issues_number" />
+				</div>
+				<div class="btn-group" data-toggle="buttons">
+					<label class="btn btn-primary" id="doing"> <input
+						value="doing" type="radio" checked /> doing
+					</label> <label class="btn btn-primary" id="accepting"> <input
+						type="radio" value="accepting" /> accepting
+					</label> <label class="btn btn-primary" id="reopen"> <input
+						type="radio" value="reopen" /> reopen
+					</label> <label class="btn btn-primary" id="done"> <input
+						type="radio" value="done" /> done
+					</label>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div id="footer"></div>
+
+	<script src="dist/js/jquery-1.11.1.min.js"></script>
+	<script src="dist/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>
