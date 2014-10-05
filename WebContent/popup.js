@@ -1,4 +1,4 @@
-changeLabel(label)
+function changeLabel(label)
 {
 	var labelUrl = "https://api.github.com/repos/" + $("#owner").val() + "/"
 			+ $("#repo").val() + "/issues/" + $("#issues_number").val()
