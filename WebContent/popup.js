@@ -4,8 +4,6 @@ changeLabel(label)
 			+ $("#repo").val() + "/issues/" + $("#issues_number").val()
 			+ "/labels?access_token=" + $("#github_access_token").val();
 
-	var isSuccess = true;
-
 	// 進捗に関係するすべてのラベルを外す
 	var deleteLabels = [ 'doing', 'accepting', 'reopen', 'done' ];
 	$.ajax({
@@ -14,10 +12,10 @@ changeLabel(label)
 		data : JSON.stringify(labels),
 		dataType : 'JSON',
 		success : function(data) {
-			isSuccess = true;
+			console.log("put is success");
 		},
 		error : function(data) {
-			isSuccess = false;
+			console.log("put is not success");
 		}
 	});
 
@@ -29,14 +27,10 @@ changeLabel(label)
 		data : JSON.stringify(labels),
 		dataType : 'JSON',
 		success : function(data) {
-			if (isSuccess) {
-				isSuccess = true;
-			}
+			console.log("post is success");
 		},
 		error : function(data) {
-			if (isSuccess) {
-				isSuccess = false;
-			}
+			console.log("post is not success");
 		}
 	});
 
