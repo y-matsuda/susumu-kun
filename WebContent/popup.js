@@ -7,15 +7,15 @@ changeLabel(label)
 	// 進捗に関係するすべてのラベルを外す
 	var deleteLabels = [ 'doing', 'accepting', 'reopen', 'done' ];
 	$.ajax({
-		type : "put",
+		type : "delete",
 		url : deleteLabels,
 		data : JSON.stringify(labels),
 		dataType : 'JSON',
 		success : function(data) {
-			console.log("put is success");
+			console.log("delete is success");
 		},
 		error : function(data) {
-			console.log("put is not success");
+			console.log("delete is not success");
 		}
 	});
 
