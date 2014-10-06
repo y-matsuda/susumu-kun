@@ -36,7 +36,7 @@ function changeLabel(label) {
 
 }
 
-$("[data-toggle='buttons']").on("click", function() {
+$("div.btn-group").on("click", function(events) {
 	console.log("buttons clicked");
-	changeLabel($('.btn-group input:radio:checked').val());
+	changeLabel($(events.target).children(':first-child').val());
 });
