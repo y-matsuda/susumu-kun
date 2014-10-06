@@ -1,5 +1,5 @@
-function changeLabel(label)
-{
+function changeLabel(label) {
+	console.log("label is " + label);
 	var labelUrl = "https://api.github.com/repos/" + $("#owner").val() + "/"
 			+ $("#repo").val() + "/issues/" + $("#issues_number").val()
 			+ "/labels?access_token=" + $("#github_access_token").val();
@@ -34,16 +34,9 @@ function changeLabel(label)
 		}
 	});
 
-	if (isSuccess) {
-		alert("success");
-	} else {
-		alert("error");
-	}
-
 }
 
-$(document).ready(function() {
-	$("input:radio").click(function() {
-		changeLabel($("input:radio[name='radio_group']:checked").val());
-	});
+$("[data-toggle='buttons']").on("click", function() {
+	console.log("buttons clicked");
+	changeLabel($('.btn-group input:radio:checked').val());
 });
