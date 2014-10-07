@@ -8,8 +8,8 @@ function changeLabel(label) {
 	var deleteLabels = [ 'doing', 'accepting', 'reopen', 'done' ];
 	$.ajax({
 		type : "delete",
-		url : deleteLabels,
-		data : JSON.stringify(labels),
+		url : labelUrl,
+		data : JSON.stringify(deleteLabels),
 		dataType : 'JSON',
 		success : function(data) {
 			console.log("delete is success");
