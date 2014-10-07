@@ -4,22 +4,12 @@ function changeLabel(label) {
 			+ $("#repo").val() + "/issues/" + $("#issues_number").val()
 			+ "/labels?access_token=" + $("#github_access_token").val();
 
-	// 進捗に関係するすべてのラベルを外す
-	var deleteLabels = [ 'doing', 'accepting', 'reopen', 'done' ];
-	$.ajax({
-		type : "delete",
-		url : labelUrl,
-		data : JSON.stringify(deleteLabels),
-		dataType : 'JSON',
-		success : function(data) {
-			console.log("delete is success");
-		},
-		error : function(data) {
-			console.log("delete is not success");
-		}
-	});
+	deleteStateLabels(labelUrl);
+	setLabel(labelUrl, label);
 
-	// ラベルを交換する ここから
+}
+
+function setLabel(labelUrl, label) {
 	var labels = [ label ];
 	$.ajax({
 		type : "post",
@@ -33,7 +23,22 @@ function changeLabel(label) {
 			console.log("post is not success");
 		}
 	});
+}
 
+function deleteStateLabels(labelUrl) {
+	var deleteLabels = [ 'doing', 'accepting', 'reopen', 'done' ];
+	$.ajax({
+		type : "delete",
+		url : labelUrl,
+		data : JSON.stringify(deleteLabels),
+		dataType : 'JSON',
+		success : function(data) {
+			console.log("delete is success");
+		},
+		error : function(data) {
+			console.log("delete is not success");
+		}
+	});
 }
 
 $("div.btn-group").on("click", function(events) {
