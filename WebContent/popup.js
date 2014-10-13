@@ -4,37 +4,31 @@ function changeLabel(label) {
 			+ $("#repo").val() + "/issues/" + $("#issues_number").val()
 			+ "/labels?access_token=" + $("#github_access_token").val();
 
-	var deleteLabels = [ 'doing', 'accepting', 'reopen', 'done' ];
-	$.ajax({
-		type : "delete",
-		url : labelUrl,
-		data : JSON.stringify(deleteLabels),
-		dataType : 'JSON',
-		success : function(data) {
-			console.log("delete is success");
-			setLabel(labelUrl, label);
-		},
-		error : function(data) {
-			console.log("delete is not success");
-		}
-	});
+	var stateLabels = [ 'doing', 'accepting', 'reopen', 'done' ];
+	var putLabels = [ label ];
 
-}
-
-function setLabel(labelUrl, label) {
-	var labels = [ label ];
-	$.ajax({
-		type : "post",
-		url : labelUrl,
-		data : JSON.stringify(labels),
-		dataType : 'JSON',
-		success : function(data) {
-			console.log("post is success");
-		},
-		error : function(data) {
-			console.log("post is not success");
+	$.when($.getJSON(labelUrl, null, function(data, status) {
+		for (i in data) {
+			var labelName = data[i].name;
+			if ($.inArray(labelName, stateLabels) == -1) {
+				putLabels.push(labelName);
+			}
 		}
-	});
+	})).then(function() {
+		$.ajax({
+			type : "put",
+			url : labelUrl,
+			data : JSON.stringify(putLabels),
+			dataType : 'JSON',
+			success : function(data) {
+				console.log("put is success");
+			},
+			error : function(data) {
+				console.log("put is not success");
+			}
+		});
+	})
+
 }
 
 $("div.btn-group").on("click", function(events) {
