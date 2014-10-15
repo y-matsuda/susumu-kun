@@ -1,14 +1,11 @@
-// Page Action?
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-//	if(tab.url.indexOf("github") != -1){
-	chrome.pageAction.setIcon({
-		'tabId': tabId,
-		'path': "icon.png"
-	});
-	// Page action show
+	var url = tab.url;
+	if (url.match(new RegExp("https:\/\/github.com\/.+\/.+\/issues\/.+"))
+			|| url.match(new RegExp("https:\/\/github.com\/.+\/.+\/pulls\/.+"))) {
+		chrome.pageAction.setIcon({
+			'tabId' : tabId,
+			'path' : "icon.png"
+		});
 		chrome.pageAction.show(tabId);
-//	}
+	}
 });
-
-
-

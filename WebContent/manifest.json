@@ -6,7 +6,8 @@
   "description": "githubのラベルを更新します",
 
   "permissions": [
-    "http://*/*"
+    "http://*/*",
+    "tabs"
   ],
 
   "background": {
