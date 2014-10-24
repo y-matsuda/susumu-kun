@@ -1,7 +1,7 @@
 function changeLabel(label) {
 	console.log("label is " + label);
-	var labelUrl = "https://api.github.com/repos/" + $("#owner").val() + "/"
-			+ $("#repo").val() + "/issues/" + $("#issues_number").val()
+	var labelUrl = "https://api.github.com/repos/" + getGithubOwner() + "/"
+			+ getGithubRepo() + "/issues/" + getGithubIssuesNumber()
 			+ "/labels?access_token=" + $("#github_access_token").val();
 
 	var stateLabels = [ 'doing', 'accepting', 'reopen', 'done' ];
@@ -27,11 +27,37 @@ function changeLabel(label) {
 				console.log("put is not success");
 			}
 		});
-	})
+	});
 
 }
 
+getGithubUrl();
 $("div.btn-group").on("click", function(events) {
 	console.log("buttons clicked");
 	changeLabel($(events.target).children(':first-child').val());
 });
+
+var issueUrlRegularExpression = new RegExp(
+		"https:\/\/github.com\/(.+)\/(.+)\/(issues|pull)\/(.+)");
+
+var githubUrl = "";
+function getGithubUrl() {
+	chrome.windows.getCurrent(function(window) {
+		chrome.tabs.getSelected(window.id, function(tab) {
+			console.log(tab.url);
+			githubUrl = tab.url;
+		});
+	});
+}
+
+function getGithubOwner() {
+	return githubUrl.match(issueUrlRegularExpression)[1];
+}
+
+function getGithubRepo() {
+	return githubUrl.match(issueUrlRegularExpression)[2];
+}
+
+function getGithubIssuesNumber() {
+	return githubUrl.match(issueUrlRegularExpression)[4];
+}
