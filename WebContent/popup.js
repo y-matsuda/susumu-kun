@@ -1,3 +1,7 @@
+var issueUrlRegularExpression = new RegExp(
+		"https:\/\/github.com\/(.+)\/(.+)\/(issues|pull)\/(.+)");
+var githubUrl = "";
+
 function changeLabel(label) {
 	console.log("label is " + label);
 	var labelUrl = "https://api.github.com/repos/" + getGithubOwner() + "/"
@@ -31,16 +35,6 @@ function changeLabel(label) {
 
 }
 
-getGithubUrl();
-$("div.btn-group").on("click", function(events) {
-	console.log("buttons clicked");
-	changeLabel($(events.target).children(':first-child').val());
-});
-
-var issueUrlRegularExpression = new RegExp(
-		"https:\/\/github.com\/(.+)\/(.+)\/(issues|pull)\/(.+)");
-
-var githubUrl = "";
 function getGithubUrl() {
 	chrome.windows.getCurrent(function(window) {
 		chrome.tabs.getSelected(window.id, function(tab) {
@@ -61,3 +55,9 @@ function getGithubRepo() {
 function getGithubIssuesNumber() {
 	return githubUrl.match(issueUrlRegularExpression)[4];
 }
+
+getGithubUrl();
+$("div.btn-group").on("click", function(events) {
+	console.log("buttons clicked");
+	changeLabel($(events.target).children(':first-child').val());
+});
