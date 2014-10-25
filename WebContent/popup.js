@@ -6,7 +6,7 @@ function changeLabel(label) {
 	console.log("label is " + label);
 	var labelUrl = "https://api.github.com/repos/" + getGithubOwner() + "/"
 			+ getGithubRepo() + "/issues/" + getGithubIssuesNumber()
-			+ "/labels?access_token=" + $("#github_access_token").val();
+			+ "/labels?access_token=" + getGithubAccessToken();
 
 	var stateLabels = [ 'doing', 'accepting', 'reopen', 'done' ];
 	var putLabels = [ label ];
@@ -54,6 +54,10 @@ function getGithubRepo() {
 
 function getGithubIssuesNumber() {
 	return githubUrl.match(issueUrlRegularExpression)[4];
+}
+
+function getGithubAccessToken() {
+	return localStorage.getItem("github_access_token");
 }
 
 getGithubUrl();
