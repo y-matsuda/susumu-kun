@@ -2,6 +2,26 @@ var issueUrlRegularExpression = new RegExp(
 		"https:\/\/github.com\/(.+)\/(.+)\/(issues|pull)\/(.+)");
 var githubUrl = "";
 
+function findCard() {
+	var findCardUrl = "https://api.trello.com/1/boards/" + getTrelloBoardId()
+			+ "/cards?fields=desc&key=" + getTrelloApplicationKey() + "&token="
+			+ getTrelloApplicationAccessToken();
+	var descRegularExpression = new RegExp(".*https:\/\/github.com\/"
+			+ getGithubOwner() + "\/" + getGithubRepo() + "\/(issues|pull)\/"
+			+ getGithubIssuesNumber() + ".*");
+	$.getJSON(findCardUrl, null, function(data) {
+		var cardId = null;
+		for (i in data) {
+			if (data[i].desc.match(descRegularExpression)) {
+				cardId = data[i].id;
+				console.log("cardId:" + cardId);
+				break;
+			}
+		}
+		return cardId;
+	});
+}
+
 function changeLabel(label) {
 	console.log("label is " + label);
 	var labelUrl = "https://api.github.com/repos/" + getGithubOwner() + "/"
@@ -60,8 +80,19 @@ function getGithubAccessToken() {
 	return localStorage.getItem("github_access_token");
 }
 
+function getTrelloBoardId() {
+	return localStorage.getItem("trello_board_id");
+}
+function getTrelloApplicationKey() {
+	return localStorage.getItem("trello_application_key");
+}
+function getTrelloApplicationAccessToken() {
+	return localStorage.getItem("trello_application_access_token");
+}
+
 getGithubUrl();
 $("div.btn-group").on("click", function(events) {
 	console.log("buttons clicked");
 	changeLabel($(events.target).children(':first-child').val());
+	console.log(findCard());
 });
