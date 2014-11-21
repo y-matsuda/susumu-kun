@@ -1,6 +1,34 @@
 var issueUrlRegularExpression = new RegExp(
 		"https:\/\/github.com\/(.+)\/(.+)\/(issues|pull)\/(.+)");
 var githubUrl = "";
+var cardId = "";
+
+function moveCard(val) {
+	var listId = getListId(val);
+	// var moveCardUrl = "https://api.trello.com/1/cards/" + findCard()
+	// + "/idList?key=" + getTrelloApplicationKey() + "&token="
+	// + getTrelloApplicationAccessToken() + "&value=" + listId;
+	$.when(function() {
+		findCard();
+	}).then(
+			function() {
+				$.ajax({
+					type : "put",
+					url : "https://api.trello.com/1/cards/" + cardId
+							+ "/idList?key=" + getTrelloApplicationKey()
+							+ "&token=" + getTrelloApplicationAccessToken()
+							+ "&value=" + listId,
+					data : null,
+					dataType : 'JSON',
+					success : function(data) {
+						console.log("put is success");
+					},
+					error : function(data) {
+						console.log("put is not success");
+					}
+				});
+			});
+}
 
 function findCard() {
 	var findCardUrl = "https://api.trello.com/1/boards/" + getTrelloBoardId()
@@ -18,7 +46,7 @@ function findCard() {
 				break;
 			}
 		}
-		return cardId;
+		this.cardId = cardId;
 	});
 }
 
@@ -90,9 +118,16 @@ function getTrelloApplicationAccessToken() {
 	return localStorage.getItem("trello_application_access_token");
 }
 
+function getListId(val) {
+	var listId = localStorage.getItem("trello_" + val + "_list_id");
+	console.log("listId:" + listId);
+	return listId;
+}
+
 getGithubUrl();
 $("div.btn-group").on("click", function(events) {
 	console.log("buttons clicked");
-	changeLabel($(events.target).children(':first-child').val());
-	console.log(findCard());
+	var val = $(events.target).children(':first-child').val();
+	// changeLabel(val);
+	moveCard(val);
 });
