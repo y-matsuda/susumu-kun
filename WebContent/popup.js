@@ -1,33 +1,24 @@
 var issueUrlRegularExpression = new RegExp(
 		"https:\/\/github.com\/(.+)\/(.+)\/(issues|pull)\/(.+)");
 var githubUrl = "";
-var cardId = "";
 
 function moveCard(val) {
 	var listId = getListId(val);
-	// var moveCardUrl = "https://api.trello.com/1/cards/" + findCard()
-	// + "/idList?key=" + getTrelloApplicationKey() + "&token="
-	// + getTrelloApplicationAccessToken() + "&value=" + listId;
-	$.when(function() {
-		findCard();
-	}).then(
-			function() {
-				$.ajax({
-					type : "put",
-					url : "https://api.trello.com/1/cards/" + cardId
-							+ "/idList?key=" + getTrelloApplicationKey()
-							+ "&token=" + getTrelloApplicationAccessToken()
-							+ "&value=" + listId,
-					data : null,
-					dataType : 'JSON',
-					success : function(data) {
-						console.log("put is success");
-					},
-					error : function(data) {
-						console.log("put is not success");
-					}
-				});
-			});
+	var moveCardUrl = "https://api.trello.com/1/cards/" + findCard()
+			+ "/idList?key=" + getTrelloApplicationKey() + "&token="
+			+ getTrelloApplicationAccessToken() + "&value=" + listId;
+	$.ajax({
+		type : "put",
+		url : moveCardUrl,
+		data : null,
+		dataType : 'JSON',
+		success : function(data) {
+			console.log("put is success");
+		},
+		error : function(data) {
+			console.log("put is not success");
+		}
+	});
 }
 
 function findCard() {
@@ -37,8 +28,11 @@ function findCard() {
 	var descRegularExpression = new RegExp(".*https:\/\/github.com\/"
 			+ getGithubOwner() + "\/" + getGithubRepo() + "\/(issues|pull)\/"
 			+ getGithubIssuesNumber() + ".*");
+	var cardId = null;
+	$.ajaxSetup({
+		async : false
+	});
 	$.getJSON(findCardUrl, null, function(data) {
-		var cardId = null;
 		for (i in data) {
 			if (data[i].desc.match(descRegularExpression)) {
 				cardId = data[i].id;
@@ -46,8 +40,11 @@ function findCard() {
 				break;
 			}
 		}
-		this.cardId = cardId;
 	});
+	$.ajaxSetup({
+		async : true
+	});
+	return cardId;
 }
 
 function changeLabel(label) {
@@ -128,6 +125,6 @@ getGithubUrl();
 $("div.btn-group").on("click", function(events) {
 	console.log("buttons clicked");
 	var val = $(events.target).children(':first-child').val();
-	// changeLabel(val);
+	changeLabel(val);
 	moveCard(val);
 });
