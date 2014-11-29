@@ -59,4 +59,5 @@ function save() {
 init();
 $("div.btn-group").on("click", function(events) {
 	save();
+	alert("保存しました。");
 });

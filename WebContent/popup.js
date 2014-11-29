@@ -3,28 +3,38 @@ var issueUrlRegularExpression = new RegExp(
 var githubUrl = "";
 
 function moveCard(val) {
-	var listId = getListId(val);
-	var moveCardUrl = "https://api.trello.com/1/cards/" + findCard()
-			+ "/idList?key=" + getTrelloApplicationKey() + "&token="
-			+ getTrelloApplicationAccessToken() + "&value=" + listId;
+	try {
+		var listId = getListId(val);
+		var moveCardUrl = "https://api.trello.com/1/cards/" + findCard()
+				+ "/idList?key=" + getTrelloApplicationKey() + "&token="
+				+ getTrelloApplicationAccessToken() + "&value=" + listId;
+	} catch (e) {
+		alert("カードの移動に失敗しました。\n\n" + e.toLocaleString());
+		return;
+	}
 	$.ajax({
 		type : "put",
 		url : moveCardUrl,
 		data : null,
 		dataType : 'JSON',
 		success : function(data) {
-			console.log("put is success");
+			alert("カードを移動しました。");
 		},
 		error : function(data) {
-			console.log("put is not success");
+			alert("カードの移動に失敗しました。");
 		}
 	});
 }
 
 function findCard() {
-	var findCardUrl = "https://api.trello.com/1/boards/" + getTrelloBoardId()
-			+ "/cards?fields=desc&key=" + getTrelloApplicationKey() + "&token="
-			+ getTrelloApplicationAccessToken();
+	try {
+		var findCardUrl = "https://api.trello.com/1/boards/"
+				+ getTrelloBoardId() + "/cards?fields=desc&key="
+				+ getTrelloApplicationKey() + "&token="
+				+ getTrelloApplicationAccessToken();
+	} catch (e) {
+		throw e;
+	}
 	var descRegularExpression = new RegExp(".*https:\/\/github.com\/"
 			+ getGithubOwner() + "\/" + getGithubRepo() + "\/(issues|pull)\/"
 			+ getGithubIssuesNumber() + ".*");
@@ -49,10 +59,14 @@ function findCard() {
 
 function changeLabel(label) {
 	console.log("label is " + label);
-	var labelUrl = "https://api.github.com/repos/" + getGithubOwner() + "/"
-			+ getGithubRepo() + "/issues/" + getGithubIssuesNumber()
-			+ "/labels?access_token=" + getGithubAccessToken();
-
+	try {
+		var labelUrl = "https://api.github.com/repos/" + getGithubOwner() + "/"
+				+ getGithubRepo() + "/issues/" + getGithubIssuesNumber()
+				+ "/labels?access_token=" + getGithubAccessToken();
+	} catch (e) {
+		alert("ラベルの変更に失敗しました。\n\n" + e.toLocaleString());
+		return;
+	}
 	var stateLabels = [ 'doing', 'accepting', 'reopen', 'done' ];
 	var putLabels = [ label ];
 
@@ -70,14 +84,13 @@ function changeLabel(label) {
 			data : JSON.stringify(putLabels),
 			dataType : 'JSON',
 			success : function(data) {
-				console.log("put is success");
+				alert("ラベルを変更しました。");
 			},
 			error : function(data) {
-				console.log("put is not success");
+				alert("ラベルの変更に失敗しました。");
 			}
 		});
 	});
-
 }
 
 function getGithubUrl() {
@@ -102,22 +115,40 @@ function getGithubIssuesNumber() {
 }
 
 function getGithubAccessToken() {
-	return localStorage.getItem("github_access_token");
+	var token = localStorage.getItem("github_access_token");
+	if (!token) {
+		throw new Error("githubのアクセストークンが設定されていません。");
+	}
+	return token;
 }
 
 function getTrelloBoardId() {
-	return localStorage.getItem("trello_board_id");
+	var id = localStorage.getItem("trello_board_id");
+	if (!id) {
+		throw new Error("trelloのボードIDが設定されていません。");
+	}
+	return id;
 }
 function getTrelloApplicationKey() {
-	return localStorage.getItem("trello_application_key");
+	var key = localStorage.getItem("trello_application_key");
+	if (!key) {
+		throw new Error("trelloのアプリケーションキーが設定されていません。");
+	}
+	return key;
 }
 function getTrelloApplicationAccessToken() {
-	return localStorage.getItem("trello_application_access_token");
+	var token = localStorage.getItem("trello_application_access_token");
+	if (!token) {
+		throw new Error("trelloのアプリケーションアクセストークンが設定されていません。");
+	}
+	return token;
 }
 
 function getListId(val) {
 	var listId = localStorage.getItem("trello_" + val + "_list_id");
-	console.log("listId:" + listId);
+	if (!listId) {
+		throw new Error("「" + val + "」のlistIDが設定されていません。");
+	}
 	return listId;
 }
 
