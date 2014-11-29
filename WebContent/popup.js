@@ -3,14 +3,14 @@ var issueUrlRegularExpression = new RegExp(
 var githubUrl = "";
 
 function moveCard(val) {
-	var message = "";
 	try {
 		var listId = getListId(val);
 		var moveCardUrl = "https://api.trello.com/1/cards/" + findCard()
 				+ "/idList?key=" + getTrelloApplicationKey() + "&token="
 				+ getTrelloApplicationAccessToken() + "&value=" + listId;
 	} catch (e) {
-		message += e.toLocaleString() + "\n";
+		alert("カードの移動に失敗しました。\n\n" + e.toLocaleString());
+		return;
 	}
 	$.ajax({
 		type : "put",
@@ -18,10 +18,10 @@ function moveCard(val) {
 		data : null,
 		dataType : 'JSON',
 		success : function(data) {
-			alert(message + "カードを移動しました。");
+			alert("カードを移動しました。");
 		},
 		error : function(data) {
-			alert(message + "カードの移動に失敗しました。");
+			alert("カードの移動に失敗しました。");
 		}
 	});
 }
@@ -59,13 +59,13 @@ function findCard() {
 
 function changeLabel(label) {
 	console.log("label is " + label);
-	var message = "";
 	try {
 		var labelUrl = "https://api.github.com/repos/" + getGithubOwner() + "/"
 				+ getGithubRepo() + "/issues/" + getGithubIssuesNumber()
 				+ "/labels?access_token=" + getGithubAccessToken();
 	} catch (e) {
-		message += e.toLocaleString() + "\n";
+		alert("ラベルの変更に失敗しました。\n\n" + e.toLocaleString());
+		return;
 	}
 	var stateLabels = [ 'doing', 'accepting', 'reopen', 'done' ];
 	var putLabels = [ label ];
@@ -84,10 +84,10 @@ function changeLabel(label) {
 			data : JSON.stringify(putLabels),
 			dataType : 'JSON',
 			success : function(data) {
-				alert(message + "ラベルを変更しました。");
+				alert("ラベルを変更しました。");
 			},
 			error : function(data) {
-				alert(message + "ラベルの変更に失敗しました。");
+				alert("ラベルの変更に失敗しました。");
 			}
 		});
 	});
