@@ -56,6 +56,54 @@ function save() {
 			.setItem("trello_done_list_id", $("#trello_done_list_id").val());
 }
 
+var trelloList = new Object();
+function findTrelloList() {
+	try {
+		var findListUrl = "https://trello.com/1/boards/" + getTrelloBoardId()
+				+ "/lists?key=" + getTrelloApplicationKey() + "&token="
+				+ getTrelloApplicationAccessToken() + "&fields=name";
+	} catch (e) {
+		throw e;
+	}
+	$.ajaxSetup({
+		async : false
+	});
+	$.getJSON(findListUrl, null, function(data) {
+		for (i in data) {
+			var id = data[i].id;
+			var name = data[i].name;
+			trelloList[id] = name;
+			console.log("id:" + id + ", name:" + name);
+		}
+	});
+	$.ajaxSetup({
+		async : true
+	});
+	return trelloList;
+}
+
+function getTrelloBoardId() {
+	var id = $("#trello_board_id").val();
+	if (!id) {
+		throw new Error("trelloのボードIDが設定されていません。");
+	}
+	return id;
+}
+function getTrelloApplicationKey() {
+	var key = $("#trello_application_key").val();
+	if (!key) {
+		throw new Error("trelloのアプリケーションキーが設定されていません。");
+	}
+	return key;
+}
+function getTrelloApplicationAccessToken() {
+	var token = $("#trello_application_access_token").val();
+	if (!token) {
+		throw new Error("trelloのアプリケーションアクセストークンが設定されていません。");
+	}
+	return token;
+}
+
 init();
 $("div.btn-group").on("click", function(events) {
 	save();
